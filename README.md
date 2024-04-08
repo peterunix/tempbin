@@ -1,17 +1,18 @@
-# Fork Changes
-
-This fork removes the expiration time for files and has a customized front page
-
 # tempbin
 
 Self-hosted temporary text paste, file and image host.
+
+## Fork Changes
+- Environmental variable added to specify your domain name when returning the paste URL
+- Random ID generated for URLS increased from 4 to 8
+- Removed the file expiration time
+- Custom frontpage (made for myself to use)
 
 ![Screenshot](./image.png)
 
 ## Features
 
 - Upload images by pasting on the page
-- Files get deleted after 24 hours
 - JavaScript not required
 - Upload from terminal: `curl --upload-file image.png http://localhost:1337`
 
