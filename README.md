@@ -24,7 +24,7 @@ git clone https://github.com/peterunix/tempbin
 
 # Run it
 cd tempbin
-LISTEN='127.0.0.1:1337' cargo run
+LISTEN='127.0.0.1:1337' DOMAIN=paste.unixfandom.com cargo run
 ```
 
 ## Configuration
