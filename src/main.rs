@@ -13,7 +13,6 @@ use lazy_static::lazy_static;
 use rand::{distributions::Alphanumeric, Rng};
 use std::{
     path::{Path, PathBuf},
-    time::SystemTime,
 };
 use tokio::{fs::File, io::AsyncWriteExt, time::Duration};
 
@@ -36,7 +35,7 @@ fn get_host_header(req: HttpRequest) -> Result<String, actix_web::Error> {
         })
 }
 
-/// Generates a random 4-character file ID.
+/// Generates a random 8-character file ID.
 fn create_file_id() -> String {
     rand::thread_rng()
         .sample_iter(&Alphanumeric)
@@ -47,7 +46,7 @@ fn create_file_id() -> String {
 
 /// Generates a full URL for a file, given its ID and filename.
 fn build_file_url(req: HttpRequest, id: &str, filename: &str) -> Result<String, actix_web::Error> {
-    let host = get_host_header(req)?;
+    let host = std::env::var("DOMAIN").unwrap_or(get_host_header(req)?.into());
     Ok(Uri::builder()
         .scheme("https")
         .authority(host)
@@ -181,54 +180,6 @@ async fn index() -> impl Responder {
         .body(INDEX_FILE)
 }
 
-/// Loops through all the files in the uploads directory and deletes files older
-/// than PURGE_AFTER.
-async fn purge() -> anyhow::Result<()> {
-    // Loop through all the files in the folder
-    let mut dir = tokio::fs::read_dir(UPLOADS_FOLDER).await?;
-    while let Ok(Some(entry)) = dir.next_entry().await {
-        let created_at = entry
-            .metadata()
-            .await
-            .expect("failed to get metadata")
-            .modified()
-            .expect("failed to get created time");
-
-        // Check if file is older than threshold
-        let dur = SystemTime::now()
-            .duration_since(created_at)
-            .unwrap_or(Duration::from_secs(0));
-        if dur > *PURGE_AFTER {
-            // Delete
-            if let Err(e) = tokio::fs::remove_file(entry.path()).await {
-                error!(
-                    "Error deleting file {}: {:?}",
-                    entry.path().to_string_lossy(),
-                    e
-                );
-            } else {
-                info!("Deleted file {}", entry.path().to_string_lossy());
-            }
-        }
-    }
-
-    Ok(())
-}
-
-async fn purge_loop(mut rx_stop: tokio::sync::oneshot::Receiver<()>) {
-    let mut interval = tokio::time::interval(Duration::from_secs(60));
-    loop {
-        tokio::select! {
-            _ = interval.tick() => {
-                if let Err(e) = purge().await {
-                    error!("Error purging files: {:?}", e);
-                }
-            },
-            _ = &mut rx_stop => break,
-        }
-    }
-}
-
 #[actix_web::main]
 async fn main() -> anyhow::Result<()> {
     // Set up logger
@@ -262,8 +213,6 @@ async fn main() -> anyhow::Result<()> {
 
     // Send the stop signal and wait
     info!("Shutting down...");
-    //tx_stop.send(()).unwrap();
-    //t_loop.await?;
 
     Ok(())
 }
