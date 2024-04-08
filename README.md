@@ -1,8 +1,12 @@
+# Fork Changes
+
+This fork removes the expiration time for files and has a customized front page
+
 # tempbin
 
 Self-hosted temporary text paste, file and image host.
 
-![Screenshot](https://user-images.githubusercontent.com/7418049/181550722-773781ad-bf92-4bce-ae09-e7432263194f.png)
+![Screenshot](./image.png)
 
 ## Features
 
@@ -15,21 +19,11 @@ Self-hosted temporary text paste, file and image host.
 
 ```bash
 # Clone the repository
-git clone https://github.com/hizkifw/tempbin
+git clone https://github.com/peterunix/tempbin
 
 # Run it
 cd tempbin
 LISTEN='127.0.0.1:1337' cargo run
-
-# Or, build the Docker image
-docker build -t tempbin .
-
-# Or, run the pre-built docker image
-docker run \
-    -d \
-    -v $(pwd)/uploads:/opt/app/uploads \
-    -p 1337:1337 \
-    ghcr.io/hizkifw/tempbin:main
 ```
 
 ## Configuration

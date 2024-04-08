@@ -21,7 +21,7 @@ const FILE_SIZE_LIMIT: usize = 2_000_000_000;
 const UPLOADS_FOLDER: &str = "uploads";
 const INDEX_FILE: &str = include_str!("./index.html");
 lazy_static! {
-    static ref PURGE_AFTER: Duration = Duration::from_secs(3600 * 24);
+    static ref PURGE_AFTER: Duration = Duration::from_secs(3600 * 48);
 }
 
 /// Returns the value of the Host header from a HttpRequest.
@@ -40,7 +40,7 @@ fn get_host_header(req: HttpRequest) -> Result<String, actix_web::Error> {
 fn create_file_id() -> String {
     rand::thread_rng()
         .sample_iter(&Alphanumeric)
-        .take(4)
+        .take(8)
         .map(char::from)
         .collect()
 }
@@ -241,8 +241,8 @@ async fn main() -> anyhow::Result<()> {
     tokio::fs::create_dir_all(UPLOADS_FOLDER).await?;
 
     // Set up purger loop
-    let (tx_stop, stop_loop) = tokio::sync::oneshot::channel();
-    let t_loop = tokio::spawn(purge_loop(stop_loop));
+    //let (tx_stop, stop_loop) = tokio::sync::oneshot::channel();
+    //let t_loop = tokio::spawn(purge_loop(stop_loop));
 
     // Start the HTTP server
     info!("Listening on {}", bind);
@@ -262,8 +262,8 @@ async fn main() -> anyhow::Result<()> {
 
     // Send the stop signal and wait
     info!("Shutting down...");
-    tx_stop.send(()).unwrap();
-    t_loop.await?;
+    //tx_stop.send(()).unwrap();
+    //t_loop.await?;
 
     Ok(())
 }

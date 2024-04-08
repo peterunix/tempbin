@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>tempbin</title>
+    <title>Pastebin</title>
     <style>
+      @font-face {
+	font-family: "Fixedsys Excelsior";
+	src: local("Fixedsys Excelsior"), url("/FSEX302.ttf") format("truetype"); 
+      }
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir,
-          segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto,
-          arial, sans-serif;
+        background: #26282A;
+	font-family: "Fixedsys Excelsior";
+        color: white;
       }
       .container {
         margin: 0 auto;
         max-width: 540px;
         padding: 1em;
         box-sizing: content-box;
+      }
+      a {
+	color: #0096FF;
       }
       h1 {
         margin: 0;
@@ -43,6 +50,7 @@
         display: block;
         background: #ddd;
         padding: 0.5em;
+	color: #26282A;
       }
     </style>
   </head>
@@ -50,8 +58,8 @@
   <body>
     <main class="container">
       <hgroup>
-        <h1>tempbin</h1>
-        <p class="subtitle">files and pastes expire after 24 hours</p>
+        <h1>Pastebin</h1>
+        <p class="subtitle">no, this isn't a secure paste service. it's my paste service. everything is logged.<a href="https://github.com/hizkifw/tempbin">[source]</a></p>
       </hgroup>
       <form method="post" action="/upload" enctype="multipart/form-data">
         <p>Upload a file, or paste an image</p>
