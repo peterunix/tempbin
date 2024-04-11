@@ -4,7 +4,7 @@ Self-hosted temporary text paste, file and image host.
 
 ## Fork Changes
 - Environmental variable added to specify your domain name when returning the paste URL
-- Random ID generated for URLS increased from 4 to 8
+- Random ID generated for URLS increased from 4 to 15
 - Removed the file expiration time
 - Custom frontpage (made for myself to use)
 

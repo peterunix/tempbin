@@ -35,11 +35,11 @@ fn get_host_header(req: HttpRequest) -> Result<String, actix_web::Error> {
         })
 }
 
-/// Generates a random 8-character file ID.
+/// Generates a random 15-character file ID.
 fn create_file_id() -> String {
     rand::thread_rng()
         .sample_iter(&Alphanumeric)
-        .take(8)
+        .take(15)
         .map(char::from)
         .collect()
 }
